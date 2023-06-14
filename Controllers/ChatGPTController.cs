@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Mvc;
 using OpenAI_API.Completions;
 using OpenAI_API;
+using ChatGpt_back.Service;
+using ChatGpt_back.Model;
 
 namespace ChatGpt_back.Controllers
 {
@@ -9,10 +11,15 @@ namespace ChatGpt_back.Controllers
     [ApiController]
     public class ChatGPTController : ControllerBase
     {
+        readonly IChatService _chatService;
+        public ChatGPTController(IChatService chatService)
+        {
+            _chatService = chatService;
+        }
         [HttpGet]
         public async Task<IActionResult> GetAnswer(string input)
         {
-            string apiKey = "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";
+            string apiKey = "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";
             string response = "";
             OpenAIAPI openai = new OpenAIAPI(apiKey);
             CompletionRequest completion = new CompletionRequest();
@@ -33,5 +40,104 @@ namespace ChatGpt_back.Controllers
                 return BadRequest("Not found");
             }
         }
+
+        [HttpPost]
+        [Route("AddQuestion")]
+        public IActionResult AddQuestion(seguestionQusetion question)
+        {
+            bool isQuestionAdded = _chatService.AddQuestion(question);
+            return Ok("Question Added");
+        }
+
+        [HttpGet]
+        [Route("GetAllQuestions")]
+        public List<seguestionQusetion> GetAllQuestions()
+        {
+            List<seguestionQusetion> seguestionQusetions = _chatService.GetAllQuestions();
+            return seguestionQusetions;
+        }
+
+        [HttpPost]
+        [Route("AddChat")]
+        public ActionResult AddChat(Chat chat)
+        {
+            if (chat == null)
+            {
+                return BadRequest("Chat must not be Null");
+            }
+            else
+            {
+                bool ischatAdded  = _chatService.AddChat(chat);
+                if (ischatAdded)
+                {
+                    return Ok("Chat Added");
+                }
+                else
+                    return BadRequest("Some Thing Wrong");
+            }
+            
+        }
+        [HttpDelete]
+        [Route("Delete/{id:int}")]
+        public ActionResult DeleteChat(int id)
+        {
+            if (id == null)
+            {
+                return BadRequest("Chat must not be Null");
+            }
+            else
+            {
+                bool ischatDeleted = _chatService.DeleteChat(id);
+                if (ischatDeleted)
+                {
+                    return Ok("Chat Deleted");
+                }
+                else
+                    return BadRequest("Some Thing Wrong");
+            }
+
+        }
+
+
+        [HttpGet]
+        [Route("GetChatListByUserId/{id:int}")]
+        public List<Chat> GetAllChatsByUserId(int id)
+        {
+            return _chatService.GetAllChatsByUserId(id);
+        }
+
+
+        //User Operations 
+
+        [HttpPost]
+        [Route("PostUser")]
+        public ActionResult PostUser(User user)
+        {
+            bool isUserAdded = _chatService.PostUser(user);
+            if (isUserAdded)
+            {
+                return Ok("User Added");
+            }
+            else
+            {
+                return BadRequest("SomeThing Wrong");
+            }
+        }
+
+        [HttpPost]
+        [Route("Login")]
+        public ActionResult LoginUser(Login login)
+        {
+            User isUserlogin = _chatService.LoginUser(login);
+            if (isUserlogin != null)
+            {
+                return Ok(isUserlogin);
+            }
+            else
+            {
+                return BadRequest("SomeThing Wrong");
+            }
+        }
     }
+
 }
