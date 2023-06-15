@@ -19,7 +19,7 @@ namespace ChatGpt_back.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAnswer(string input)
         {
-            string apiKey = "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";
+            string apiKey = "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";
             string response = "";
             OpenAIAPI openai = new OpenAIAPI(apiKey);
             CompletionRequest completion = new CompletionRequest();
