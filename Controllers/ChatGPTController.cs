@@ -19,7 +19,7 @@ namespace ChatGpt_back.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAnswer(string input)
         {
-            string apiKey = "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";
+            string apiKey = "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";
             string response = "";
             OpenAIAPI openai = new OpenAIAPI(apiKey);
             CompletionRequest completion = new CompletionRequest();
@@ -34,6 +34,25 @@ namespace ChatGpt_back.Controllers
                     response = item.Text;
                 }
                 return Ok(response);
+            }
+            else
+            {
+                return BadRequest("Not found");
+            }
+        }
+
+        [HttpPost]
+        [Route("GetImage")]
+        public async Task<IActionResult> GetImage(string input)
+        {
+            string apiKey = "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";
+            OpenAIAPI openai = new OpenAIAPI(apiKey);
+            var output =  openai.ImageGenerations.CreateImageAsync(input);
+            
+            if (output != null)
+            {
+                
+                return Ok(output.Result.Data);
             }
             else
             {
@@ -100,43 +119,27 @@ namespace ChatGpt_back.Controllers
 
 
         [HttpGet]
-        [Route("GetChatListByUserId/{id:int}")]
-        public List<Chat> GetAllChatsByUserId(int id)
+        [Route("GetChatListByUserId/{id}")]
+        public List<Chat> GetAllChatsByUserId(string id)
         {
             return _chatService.GetAllChatsByUserId(id);
         }
 
 
-        //User Operations 
-
-        [HttpPost]
-        [Route("PostUser")]
-        public ActionResult PostUser(User user)
+       
+        [HttpPut]
+        [Route("EditChat")]
+        public ActionResult Editchat(EditChatModel editChatModel)
         {
-            bool isUserAdded = _chatService.PostUser(user);
-            if (isUserAdded)
-            {
-                return Ok("User Added");
-            }
-            else
-            {
-                return BadRequest("SomeThing Wrong");
-            }
-        }
 
-        [HttpPost]
-        [Route("Login")]
-        public ActionResult LoginUser(Login login)
-        {
-            User isUserlogin = _chatService.LoginUser(login);
-            if (isUserlogin != null)
+            bool isChatUpdated=_chatService.Editchat(editChatModel);
+
+           
+            if(isChatUpdated)
             {
-                return Ok(isUserlogin);
+                return Ok(isChatUpdated);
             }
-            else
-            {
-                return BadRequest("SomeThing Wrong");
-            }
+            return BadRequest("SomeThing Wrong");
         }
     }
 

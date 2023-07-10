@@ -1,5 +1,6 @@
 ﻿using ChatGpt_back.Model;
 using ChatGpt_back.Repository;
+using Microsoft.AspNetCore.Mvc;
 
 namespace ChatGpt_back.Service
 {
@@ -47,7 +48,29 @@ namespace ChatGpt_back.Service
             return true;
         }
 
-        public List<Chat> GetAllChatsByUserId(int id)
+        public bool Editchat(EditChatModel editChatModel)
+        {
+            Chat chat=_chatRepo.GetAllChatById(editChatModel.Id);
+            if(chat == null)
+            {
+                return false;
+            }
+            else
+            {
+                chat.Answer = editChatModel.Text;
+                int IsChatEdited = _chatRepo.EditChat(chat);
+                if(IsChatEdited == 0)
+                { 
+                    return false;
+                }
+                return true;
+               
+               
+                
+            }
+        }
+
+        public List<Chat> GetAllChatsByUserId(string id)
         {
             return _chatRepo.GetAllChatsByUserId(id);
         }
@@ -57,44 +80,6 @@ namespace ChatGpt_back.Service
             return _chatRepo.GetAllQuestions();
         }
 
-        public User LoginUser(Login login)
-        {
-            User user1 = _chatRepo.GetUserById(login.Email);
-            if (user1 == null)
-            {
-                throw new Exception("Email Not Present");
-            }
-            else
-            {
-                User isUserLogin = _chatRepo.LoginUser(login);
-                if (isUserLogin == null)
-                {
-                    return null;
-                }
-                else
-                    return isUserLogin;
-            }
-        }
-
-        public bool PostUser(User user)
-        {
-            User user1 = _chatRepo.GetUserById(user.Email);
-            if(user1 != null)
-            {
-                throw new Exception("Email Already Present");
-            }
-            else
-            {
-                int isUserAdded = _chatRepo.PostUser(user);
-                if(isUserAdded == 0)
-                {
-                    return false;
-                }
-                else
-                {
-                    return true;
-                }
-            }
-        }
+        
     }
 }

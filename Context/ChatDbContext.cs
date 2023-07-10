@@ -8,7 +8,6 @@ namespace ChatGpt_back.Context
         public ChatDbContext(DbContextOptions<ChatDbContext> options) : base(options)  {  }
         public DbSet<seguestionQusetion> Question { get; set; }
         public DbSet<Chat> chats { get; set; }
-        public DbSet<User> users { get; set; }
     }
 }
 

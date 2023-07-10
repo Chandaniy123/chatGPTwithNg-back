@@ -7,9 +7,8 @@ namespace ChatGpt_back.Service
         bool AddChat(Chat chat);
         bool AddQuestion(seguestionQusetion question);
         bool DeleteChat(int id);
-        List<Chat> GetAllChatsByUserId(int id);
+        bool Editchat(EditChatModel editChatModel);
+        List<Chat> GetAllChatsByUserId(string id);
         List<seguestionQusetion> GetAllQuestions();
-        User LoginUser(Login login);
-        bool PostUser(User user);
     }
 }

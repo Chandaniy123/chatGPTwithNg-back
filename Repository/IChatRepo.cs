@@ -7,10 +7,10 @@ namespace ChatGpt_back.Repository
         int AddChat(Chat chat);
         int AddQuestion(seguestionQusetion question);
         int DeleteChat(int id);
-        List<Chat> GetAllChatsByUserId(int id);
+        int EditChat(Chat chat);
+        Chat GetAllChatById(int id);
+        List<Chat> GetAllChatsByUserId(string id);
         List<seguestionQusetion> GetAllQuestions();
-        User GetUserById(string email);
-        User LoginUser(Login login);
-        int PostUser(User user);
+
     }
 }

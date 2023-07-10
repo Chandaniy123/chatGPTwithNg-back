@@ -37,7 +37,18 @@ namespace ChatGpt_back.Repository
             return chatDeleted;
         }
 
-        public List<Chat> GetAllChatsByUserId(int id)
+        public int EditChat(Chat chat)
+        {
+            chatDbContext.chats.Update(chat);
+            return  chatDbContext.SaveChanges();
+        }
+
+        public Chat GetAllChatById(int id)
+        {
+            return chatDbContext.chats.Where(c => c.Id == id).FirstOrDefault();
+        }
+
+        public List<Chat> GetAllChatsByUserId(string id)
         {
             return chatDbContext.chats.Where(c => c.UserId == id).ToList();
         }
@@ -47,20 +58,6 @@ namespace ChatGpt_back.Repository
             return chatDbContext.Question.ToList();
         }
 
-        public User GetUserById(string email)
-        {
-            return chatDbContext.users.Where(u => u.Email == email).FirstOrDefault();
-        }
-
-        public User LoginUser(Login login)
-        {
-            return chatDbContext.users.Where(u => u.Email == login.Email && u.Password == login.Password).FirstOrDefault();
-        }
-
-        public int PostUser(User user)
-        {
-            chatDbContext.users.Add(user);  
-            return chatDbContext.SaveChanges();
-        }
+        
     }
 }
