@@ -19,7 +19,7 @@ namespace ChatGpt_back.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAnswer(string input)
         {
-            string apiKey = "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";
+            string apiKey = "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";
             string response = "";
             OpenAIAPI openai = new OpenAIAPI(apiKey);
             CompletionRequest completion = new CompletionRequest();
@@ -45,7 +45,7 @@ namespace ChatGpt_back.Controllers
         [Route("GetImage")]
         public async Task<IActionResult> GetImage(string input)
         {
-            string apiKey = "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";
+            string apiKey = "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";
             OpenAIAPI openai = new OpenAIAPI(apiKey);
             var output =  openai.ImageGenerations.CreateImageAsync(input);
             
